@@ -1,0 +1,28 @@
+version: "3.7"
+services:
+  mongodb:
+    container_name: mongo-dev
+    image: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=administrador
+      - MONGO_INITDB_ROOT_PASSWORD=StRoNgP@ssWorD
+      - MONGO_INITDB_DATABASE=login
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    depends_on:
+      - mongodb
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=administrador
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=StRoNgP@ssWorD
+      - ME_CONFIG_MONGODB_SERVER=mongo-dev
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=ihavealongpassword
+    ports:
+      - '8081:8081'
